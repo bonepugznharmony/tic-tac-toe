@@ -1,29 +1,50 @@
-//1. gameboard is stored as an array inside of Gameboard object
+//1. Store the gameboard array inside of a gameboard object
+
 const createGameBoard = (function () {
-  const board = function () {
-    let boardArray = {
+  const boardArray = function () {
+    return {
       grid: [
-        ['', '', ''],
-        ['', '', ''],
-        ['', '', ''],
+        ['1', '2', '3'],
+        ['4', '5', '6'],
+        ['7', '8', '9'],
       ],
     }
-    return boardArray
   }
-  return { board }
+
+  const printBoard = function () {
+    return boardArray()
+  }
+  return { printBoard }
 })()
 
-const newBoard = createGameBoard.board()
-console.log(newBoard)
+let newBoard = createGameBoard.printBoard()
+console.log(newBoard) // => { grid: [ [ '1', '2', '3' ], [ '4', '5', '6' ], [
+// '7', '8', '9' ] ] }
 
-// call factory function to create gameboard object
-// 2. create an object that creates players
-// factory function
+// 2. create a factory function that creates players objects
 
-/*
-3. an object that controls the flow of the game
+const playerFactory = function (name, mark) {
+  const setName = name
+  const setMark = mark
 
-4. if you only ever need ONE of something (gameBoard, displayController)
+  const getName = function () {
+    return setName
+  }
 
-5. If you need multiples of something (players!), create them with factories
-*/
+  const getMark = function () {
+    return setMark
+  }
+
+  return { getName, getMark }
+}
+
+const player1 = playerFactory('Player 1', 'X')
+console.log(player1)
+const player2 = playerFactory('Player 2', 'O')
+console.log(player2)
+
+// 3. an object that controls the flow of the game
+
+// 4. if you only ever need ONE of something (gameBoard, displayController)
+
+// 5. If you need multiples of something (players!), create them with factories

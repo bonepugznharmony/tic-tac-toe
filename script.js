@@ -1,3 +1,5 @@
+const gridDisplayArea = document.querySelector('.testing-space')
+
 // 1. Create a IFFE module to create a gameboard object
 const createGameBoard = (function () {
   const boardArray = function () {
@@ -31,22 +33,33 @@ const player2 = playerFactory('Player 2', 'O')
 
 // 3. Function to start game logic
 // function takes three parameters player1, player2 and gameboard.
-function playGame(player1, player2, gameboard) {
-  // player turn
-  let playerTurns
-
+function gameFlow(player1, player2, gameboard) {
   // if player turn is player1
-  if (playerTurn === player1) {
-    // put player1 mark down on the gameboard
-    // check winning condition (combo)
-    // if win is detected announce winner
-    // otherwise winning condition is false
-    // switch to player2
-  } else if (playerTurn === player2) {
-    // put player2 mark down on the gameboard
-    // check winning condition (combo)
-    // if win is detected announce winner
-    // otherwise winning condition is false
-    // switch to player 1
-  }
+
+  //place mark on the index 0
+  gameboard.grid[0] = player1.getMark()
+  displayController.displayBoard()
+  // put player1 mark down on the gameboard
+  // check winning condition (combo)
+  // if win is detected announce winner
+  // otherwise winning condition is false
+  // switch to player2
+
+  // put player2 mark down on the gameboard
+  // check winning condition (combo)
+  // if win is detected announce winner
+  // otherwise winning condition is false
+  // switch to player 1
 }
+
+const displayController = (function () {
+  const displayBoard = function () {
+    for (index of gameboard.grid) {
+      gridDisplayArea.textContent += index
+    }
+  }
+  return { displayBoard }
+})()
+
+// Once project is finished, store all invocation flow to main()
+gameFlow(player1, player2, gameboard)

@@ -35,10 +35,22 @@ const player2 = playerFactory('Player 2', 'O')
 // function takes three parameters player1, player2 and gameboard.
 function gameFlow(player1, player2, gameboard) {
   // if player turn is player1
+  let currentPlayer = player1
+  // player switch function
+  const switchPlayers = function () {
+    if (currentPlayer === player1) {
+      currentPlayer = player2
+    } else {
+      currentPlayer = player1
+    }
+  }
 
   //place mark on the index 0
+  console.log(currentPlayer)
   gameboard.grid[0] = player1.getMark()
   displayController.displayBoard()
+  switchPlayers()
+  console.log(currentPlayer)
   // put player1 mark down on the gameboard
   // check winning condition (combo)
   // if win is detected announce winner
@@ -50,6 +62,10 @@ function gameFlow(player1, player2, gameboard) {
   // if win is detected announce winner
   // otherwise winning condition is false
   // switch to player 1
+  return {
+    currentPlayer,
+    switchPlayers,
+  }
 }
 
 const displayController = (function () {

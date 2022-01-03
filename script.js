@@ -1,4 +1,4 @@
-const gridDisplayArea = document.querySelector('.testing-space')
+const gridDisplayArea = document.querySelector('.grid-container')
 
 // 1. Create a IFFE module to create a gameboard object
 const createGameBoard = (() => {
@@ -13,7 +13,7 @@ const createGameBoard = (() => {
   return { printBoard }
 })()
 
-let gameboard = createGameBoard.printBoard()
+let board = createGameBoard.printBoard()
 
 // 2. Create a factory function that creates two player objects
 const playerFactory = (name, mark) => {
@@ -35,8 +35,8 @@ const player2 = playerFactory('Player 2', 'O')
 function gameFlow() {
   let player1Turn = true
   // player switch function
-  // if player turn is player1
   const switchPlayers = () => {
+    // if player turn is player1
     if (player1Turn === true) {
       // place mark for player1 function
     } else {
@@ -48,36 +48,46 @@ function gameFlow() {
   }
 
   const playerMark = () => {
-  //place mark on the index 0
-  console.log(currentPlayer)
-  gameboard.grid[0] = player1.getMark()
-  displayController.displayBoard()
-  switchPlayers()
-  console.log(currentPlayer)
-  // put player1 mark down on the gameboard
-  // check winning condition (combo)
-  // if win is detected announce winner
-  // otherwise winning condition is false
-  // switch to player2
+    // player clicks the event and triggers player mark function
+    // set the index of the array with player mark
+    // gameboard array index is set to the player get mark
+    for (let i = 0; i < board.length; i++) {
+      if (player1Turn === true) {
+        board.grid[i] = player1.getMark()
+        //displayController.displayGrid()
+        displayGame.displayGrid()
+      } else {
+        board.grid[i] = player2.getMark()
+        displayGame.displayGrid()
+      }
+    }
+  }
 
-  // put player2 mark down on the gameboard
-  // check winning condition (combo)
-  // if win is detected announce winner
-  // otherwise winning condition is false
-  // switch to player 1
   return {
-    currentPlayer,
     switchPlayers,
+    playerMark,
+    player1Turn,
   }
 }
 
-const displayController = (function () {
-  const displayBoard = function () {
-    for (index of gameboard.grid) {
-      gridDisplayArea.textContent += index
+const game = gameFlow()
+
+const displayController = () => {
+  const displayGrid = () => {
+    for (index of board.grid) {
+      let gridBox = document.createElement('button')
+      gridDisplayArea.appendChild(gridBox)
+      gridBox.classList.add('grid-btn')
+      gridBox.textContent += index
     }
   }
-  return { displayBoard }
-})()
 
-// Once project is finished, store all invocation flow to main()?
+  return { displayGrid }
+}
+
+const displayGame = displayController()
+
+displayGame.displayGrid()
+const boxBtn = document.querySelectorAll('.grid-btn')
+
+console.log(boxBtn)

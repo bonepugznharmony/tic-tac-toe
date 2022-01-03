@@ -2,6 +2,15 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-p {
-  font-size: 1em;
+.grid-container {
+  display: block;
+  font-size: 2em;
+  border: 2px solid black;
+}
+
+.grid-btn {
+  font-size: 32px;
+  width: 60px;
+  height: 60px;
+  margin: 10px;
 }

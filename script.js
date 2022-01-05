@@ -91,11 +91,10 @@ displayGame.displayGrid()
 const boxBtn = document.querySelectorAll('.grid-box')
 
 for (let i = 0; i < boxBtn.length; i++) {
-  boxBtn[i].addEventListener('click', placeMark())
-}
-
-function placeMark() {
-  console.log(e.target.classList)
+  boxBtn[i].addEventListener('click', (e) => {
+    e.target === boxBtn[i]
+    console.log(board.grid[i])
+  })
 }
 
 console.log(boxBtn)

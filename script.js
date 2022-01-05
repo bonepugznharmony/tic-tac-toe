@@ -75,9 +75,9 @@ const game = gameFlow()
 const displayController = () => {
   const displayGrid = () => {
     for (index of board.grid) {
-      let gridBox = document.createElement('button')
+      let gridBox = document.createElement('div')
       gridDisplayArea.appendChild(gridBox)
-      gridBox.classList.add('grid-btn')
+      gridBox.classList.add('grid-box')
       gridBox.textContent += index
     }
   }
@@ -88,6 +88,14 @@ const displayController = () => {
 const displayGame = displayController()
 
 displayGame.displayGrid()
-const boxBtn = document.querySelectorAll('.grid-btn')
+const boxBtn = document.querySelectorAll('.grid-box')
+
+for (let i = 0; i < boxBtn.length; i++) {
+  boxBtn[i].addEventListener('click', placeMark())
+}
+
+function placeMark() {
+  console.log(e.target.classList)
+}
 
 console.log(boxBtn)

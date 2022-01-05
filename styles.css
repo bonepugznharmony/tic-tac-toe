@@ -2,15 +2,29 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.grid-container {
-  display: block;
-  font-size: 2em;
-  border: 2px solid black;
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.grid-btn {
+.grid-container {
+  display: grid;
+  font-size: 2em;
+  grid-template-rows: 100px 100px 100px;
+  grid-template-columns: 100px 100px 100px;
+  gap: 1px 1px;
+}
+
+.grid-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 32px;
-  width: 60px;
-  height: 60px;
-  margin: 10px;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.grid-box:hover {
+  background-color: lightgreen;
 }

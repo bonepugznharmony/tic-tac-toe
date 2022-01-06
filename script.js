@@ -1,6 +1,4 @@
-const gridDisplayArea = document.querySelector('.grid-container')
-
-// 1. Create a IFFE module to create a gameboard object
+// 1. Create a IFFE module to create a game board object
 const createGameBoard = (() => {
   const boardArray = () => {
     return {
@@ -48,11 +46,11 @@ function gameFlow() {
     for (let i = 0; i < board.length; i++) {
       if (player1Turn === true) {
         board.grid[i] = player1.getMark()
-        //displayController.displayGrid()
-        displayGame.displayGrid()
+        //displayController.drawGrid()
+        displayGame.drawGrid()
       } else {
         board.grid[i] = player2.getMark()
-        displayGame.displayGrid()
+        displayGame.drawGrid()
       }
     }
   }
@@ -61,45 +59,54 @@ function gameFlow() {
   return {
     switchPlayers,
     player1Turn,
-    //playerMark,
   }
 }
 
 const game = gameFlow()
 
 const displayController = () => {
-  const displayGrid = () => {
-    for (index of board.grid) {
+  const gridContainer = document.querySelector('.grid-container')
+
+  const drawGrid = () => {
+    board.grid.forEach((item) => {
       let gridBox = document.createElement('div')
-      gridDisplayArea.appendChild(gridBox)
+      gridContainer.appendChild(gridBox)
       gridBox.classList.add('grid-box')
-      gridBox.textContent += index
-    }
+      gridBox.textContent += item
+    })
   }
 
-  return { displayGrid }
+  const clearDisplay = () => {
+    let lastGridBox = document.querySelectorAll('.grid-box')
+    lastGridBox.forEach((box) => {
+      gridContainer.removeChild(box)
+    })
+  }
+
+  return { drawGrid, clearDisplay }
 }
 
 const displayGame = displayController()
 
 const main = (() => {
-  displayGame.displayGrid()
+  displayGame.drawGrid()
+
   const boxBtn = document.querySelectorAll('.grid-box')
 
   for (let i = 0; i < boxBtn.length; i++) {
     boxBtn[i].addEventListener('click', (e) => {
       if (game.player1Turn === true) {
-        game.switchPlayers(game.player1Turn)
-        //e.target === boxBtn[i]
         board.grid[i] = player1.getMark()
+        displayGame.clearDisplay()
+        displayGame.drawGrid()
+        game.switchPlayers(game.player1Turn)
         console.log(game.player1Turn)
         console.log(board.grid)
-        //clear grid before drawing again
-        //displayGame.displayGrid()
       } else if (game.player1Turn === false) {
-        game.switchPlayers(game.player1Turn)
-        //e.target === boxBtn[i]
         board.grid[i] = player2.getMark()
+        displayGame.clearDisplay()
+        displayGame.drawGrid()
+        game.switchPlayers(game.player1Turn)
         console.log(game.player1Turn)
         console.log(board.grid)
       }

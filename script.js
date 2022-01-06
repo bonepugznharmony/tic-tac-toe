@@ -34,23 +34,17 @@ const player2 = playerFactory('Player 2', 'O')
 // 3. Function to start game logic
 function gameFlow() {
   let player1Turn = true
-  // player switch function
-  const switchPlayers = () => {
-    // if player turn is player1
+
+  const switchPlayers = (player1Turn) => {
     if (player1Turn === true) {
-      // place mark for player1 function
-    } else {
-      // place mark for player 2
+      game.player1Turn = false
+    } else if (player1Turn === false) {
+      game.player1Turn = true
     }
-    //switch player
-    //is player 1 turn not true?
-    player1Turn = !player1Turn
   }
 
+  /* is this even needed?
   const playerMark = () => {
-    // player clicks the event and triggers player mark function
-    // set the index of the array with player mark
-    // gameboard array index is set to the player get mark
     for (let i = 0; i < board.length; i++) {
       if (player1Turn === true) {
         board.grid[i] = player1.getMark()
@@ -62,11 +56,12 @@ function gameFlow() {
       }
     }
   }
+  */
 
   return {
     switchPlayers,
-    playerMark,
     player1Turn,
+    //playerMark,
   }
 }
 
@@ -87,14 +82,27 @@ const displayController = () => {
 
 const displayGame = displayController()
 
-displayGame.displayGrid()
-const boxBtn = document.querySelectorAll('.grid-box')
+const main = (() => {
+  displayGame.displayGrid()
+  const boxBtn = document.querySelectorAll('.grid-box')
 
-for (let i = 0; i < boxBtn.length; i++) {
-  boxBtn[i].addEventListener('click', (e) => {
-    e.target === boxBtn[i]
-    console.log(board.grid[i])
-  })
-}
-
-console.log(boxBtn)
+  for (let i = 0; i < boxBtn.length; i++) {
+    boxBtn[i].addEventListener('click', (e) => {
+      if (game.player1Turn === true) {
+        game.switchPlayers(game.player1Turn)
+        //e.target === boxBtn[i]
+        board.grid[i] = player1.getMark()
+        console.log(game.player1Turn)
+        console.log(board.grid)
+        //clear grid before drawing again
+        //displayGame.displayGrid()
+      } else if (game.player1Turn === false) {
+        game.switchPlayers(game.player1Turn)
+        //e.target === boxBtn[i]
+        board.grid[i] = player2.getMark()
+        console.log(game.player1Turn)
+        console.log(board.grid)
+      }
+    })
+  }
+})()

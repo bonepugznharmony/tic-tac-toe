@@ -8,7 +8,7 @@ body {
   align-items: center;
 }
 
-.grid-container {
+#grid-container {
   display: grid;
   font-size: 2em;
   grid-template-rows: 100px 100px 100px;

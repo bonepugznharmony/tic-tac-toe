@@ -46,7 +46,7 @@ function gameFlow() {
 const game = gameFlow()
 
 const displayController = () => {
-  const gridContainer = document.querySelector('.grid-container')
+  const gridContainer = document.querySelector('#grid-container')
 
   const drawGrid = () => {
     board.grid.forEach((item) => {
@@ -69,8 +69,8 @@ const displayController = () => {
 const display = displayController()
 display.drawGrid()
 
-const gridBtns = document.querySelectorAll('.grid-box')
-const gridBtnsArr = [...gridBtns]
+const gridBtns = document.querySelector('#grid-container')
+//const gridBtnsArr = [...gridBtns]
 
 const handleGridBtns = (e) => {
   const gridBtnValue = e.target.textContent
@@ -83,7 +83,9 @@ const handleGridBtns = (e) => {
   }
 }
 
-gridBtnsArr.forEach((div) => div.addEventListener('click', handleGridBtns))
+gridBtns.addEventListener('click', handleGridBtns)
+
+//gridBtnsArr.forEach((div) => div.addEventListener('click', handleGridBtns))
 
 /*
 const isGridNum = (gridBtnValue) => {

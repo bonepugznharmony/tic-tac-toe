@@ -1,3 +1,4 @@
+// Gameboard IIFE and board instantiation
 const createGameBoard = (() => {
   const boardArray = () => {
     return {
@@ -9,8 +10,10 @@ const createGameBoard = (() => {
   }
   return { printBoard }
 })()
+
 let board = createGameBoard.printBoard()
 
+// Player factory function and instantiation
 const playerFactory = (name, mark) => {
   const setName = name
   const setMark = mark
@@ -22,9 +25,11 @@ const playerFactory = (name, mark) => {
   }
   return { getName, getMark }
 }
+
 const player1 = playerFactory('Player 1', 'X')
 const player2 = playerFactory('Player 2', 'O')
 
+// Game logic function and instantiation
 function gameFlow() {
   let player1Turn = true
 
@@ -32,19 +37,33 @@ function gameFlow() {
     if (player1Turn === true) {
       game.player1Turn = false
       return player1.getMark()
-    } else if (player1Turn === false) {
+    } else {
       game.player1Turn = true
       return player2.getMark()
     }
   }
 
+  // Check if the mark has been placed on the board
+  const placeMark = (i) => {
+    if (board.grid[i] === 'X' || board.grid[i] === 'O') {
+      // return something in the dom
+      // to place to mark elsewhere
+    } else {
+      board.grid[i] = game.switchPlayers(game.player1Turn)
+    }
+  }
+
+  // Check win condition
+
   return {
     switchPlayers,
     player1Turn,
+    placeMark,
   }
 }
 const game = gameFlow()
 
+// Game display function
 const displayController = () => {
   const gridContainer = document.querySelector('#grid-container')
 
@@ -67,53 +86,24 @@ const displayController = () => {
   return { drawGrid, clearGrid }
 }
 const display = displayController()
-display.drawGrid()
 
-const gridBtns = document.querySelector('#grid-container')
-//const gridBtnsArr = [...gridBtns]
+// Main IIFE to execute flow
+const main = (() => {
+  display.drawGrid()
 
-const handleGridBtns = (e) => {
-  const gridBtnValue = e.target.textContent
-  for (let i = 0; i < board.grid.length; i++) {
-    if (gridBtnValue === board.grid[i]) {
-      board.grid[i] = game.switchPlayers(game.player1Turn)
-      display.clearGrid()
-      display.drawGrid()
+  const gridBtns = document.querySelector('#grid-container')
+
+  const handleGridBtns = (e) => {
+    const gridBtnValue = e.target.textContent
+    for (let i = 0; i < board.grid.length; i++) {
+      if (gridBtnValue === board.grid[i]) {
+        game.placeMark(i)
+        console.log(board.grid)
+        display.clearGrid()
+        display.drawGrid()
+      }
     }
   }
-}
 
-gridBtns.addEventListener('click', handleGridBtns)
-
-//gridBtnsArr.forEach((div) => div.addEventListener('click', handleGridBtns))
-
-/*
-const isGridNum = (gridBtnValue) => {
-  const arrGridNum = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
-  return arrGridNum.includes(gridBtnValue)
-}
-
-/*
-const playerMark = (gridBtnValue) => {
-  for (let i = 0; i < gridBtns.length; i++) {
-    if (game.player1Turn === true) {
-      board.grid[gridBtnValue] = player1.getMark()
-      game.switchPlayers(game.player1Turn)
-      console.log(game.player1Turn)
-      console.log(board.grid)
-    } else if (game.player1Turn === false) {
-      board.grid[gridBtnValue] = player2.getMark()
-      game.switchPlayers(game.player1Turn)
-      console.log(game.player1Turn)
-      console.log(board.grid)
-    }
-  }
-}
-
-/*
-Yes, if you add a breakpoint in your event listener and step into the logic, you'll see that you remove the grids then re-attach them. But when they are re-attached, the existing event listeners lose their reference. 
-A couple suggestions:
-
-1. You could add your event listeners in the drawGrid function.
-2. You could make use of event delegation and only add the event listener to the grid container. (Why have 9 event listeners when you only need 1!?)
-*/
+  gridBtns.addEventListener('click', handleGridBtns)
+})()

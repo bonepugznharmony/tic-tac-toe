@@ -34,7 +34,7 @@ function gameFlow() {
   let player1Turn = true
 
   const switchPlayers = (player1Turn) => {
-    if (player1Turn === true) {
+    if (player1Turn) {
       game.player1Turn = false
       return player1.getMark()
     } else {
@@ -46,14 +46,11 @@ function gameFlow() {
   // Check if the mark has been placed on the board
   const placeMark = (i) => {
     if (board.grid[i] === 'X' || board.grid[i] === 'O') {
-      // return something in the dom
-      // to place to mark elsewhere
+      return
     } else {
       board.grid[i] = game.switchPlayers(game.player1Turn)
     }
   }
-
-  // Check win condition
 
   return {
     switchPlayers,
@@ -99,6 +96,7 @@ const main = (() => {
       if (gridBtnValue === board.grid[i]) {
         game.placeMark(i)
         console.log(board.grid)
+        checkWinner()
         display.clearGrid()
         display.drawGrid()
       }
@@ -107,3 +105,38 @@ const main = (() => {
 
   gridBtns.addEventListener('click', handleGridBtns)
 })()
+
+// Check win condition
+const checkWinner = () => {
+  let player
+  if (game.player1Turn === false) {
+    player = player1.getMark()
+  } else {
+    player = player2.getMark()
+  }
+
+  const winCombos = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ]
+
+  winCombos.forEach((combo) => {
+    if (
+      board.grid[combo[0]] === player &&
+      board.grid[combo[1]] === player &&
+      board.grid[combo[2]] === player
+    ) {
+      console.log(`winner is ${player}`)
+    }
+  })
+}
+
+// If winner is found stop the game
+
+// Display winner in the DOM

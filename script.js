@@ -32,13 +32,21 @@ const player2 = playerFactory('Player 2', 'O')
 // Game logic function and instantiation
 function gameFlow() {
   let player1Turn = true
+  let playerMark = ''
+  let playerName = ''
+  let turnCount = 0
+  let winner = false
 
   const switchPlayers = (player1Turn) => {
     if (player1Turn) {
       game.player1Turn = false
+      game.turnCount += 1
+      game.playerName = player1.getName()
       return player1.getMark()
     } else {
       game.player1Turn = true
+      game.turnCount += 1
+      game.playerName = player2.getName()
       return player2.getMark()
     }
   }
@@ -52,10 +60,51 @@ function gameFlow() {
     }
   }
 
+  // Check win condition
+  const checkWinner = () => {
+    if (game.player1Turn === false) {
+      playerMark = player1.getMark()
+    } else {
+      playerMark = player2.getMark()
+    }
+
+    const winCombos = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ]
+
+    winCombos.forEach((combo) => {
+      if (
+        board.grid[combo[0]] === playerMark &&
+        board.grid[combo[1]] === playerMark &&
+        board.grid[combo[2]] === playerMark
+      ) {
+        return (game.winner = true)
+      }
+    })
+  }
+
+  const tieGame = () => {
+    if (game.turnCount === 9) {
+      console.log('tie game')
+    }
+  }
+
   return {
     switchPlayers,
     player1Turn,
     placeMark,
+    playerName,
+    checkWinner,
+    tieGame,
+    turnCount,
+    winner,
   }
 }
 const game = gameFlow()
@@ -80,8 +129,13 @@ const displayController = () => {
     })
   }
 
-  return { drawGrid, clearGrid }
+  const endGame = () => {
+    console.log(`${game.playerName} is the winner!`)
+  }
+
+  return { drawGrid, clearGrid, gridContainer, endGame }
 }
+
 const display = displayController()
 
 // Main IIFE to execute flow
@@ -95,48 +149,17 @@ const main = (() => {
     for (let i = 0; i < board.grid.length; i++) {
       if (gridBtnValue === board.grid[i]) {
         game.placeMark(i)
-        console.log(board.grid)
-        checkWinner()
+        game.checkWinner()
         display.clearGrid()
         display.drawGrid()
+        if (game.winner === true) {
+          gridBtns.removeEventListener('click', handleGridBtns)
+          return display.endGame()
+        }
+        game.tieGame()
       }
     }
   }
 
   gridBtns.addEventListener('click', handleGridBtns)
 })()
-
-// Check win condition
-const checkWinner = () => {
-  let player
-  if (game.player1Turn === false) {
-    player = player1.getMark()
-  } else {
-    player = player2.getMark()
-  }
-
-  const winCombos = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ]
-
-  winCombos.forEach((combo) => {
-    if (
-      board.grid[combo[0]] === player &&
-      board.grid[combo[1]] === player &&
-      board.grid[combo[2]] === player
-    ) {
-      console.log(`winner is ${player}`)
-    }
-  })
-}
-
-// If winner is found stop the game
-
-// Display winner in the DOM

@@ -2,7 +2,7 @@
 const createGameBoard = (() => {
   const boardArray = () => {
     return {
-      grid: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+      grid: ['', '', '', '', '', '', '', '', ''],
     }
   }
   const printBoard = () => {
@@ -92,7 +92,7 @@ function gameFlow() {
 
   const tieGame = () => {
     if (game.turnCount === 9) {
-      console.log('tie game')
+      display.turnAndResult.textContent = 'Tie Game...'
     }
   }
 
@@ -112,13 +112,17 @@ const game = gameFlow()
 // Game display function
 const displayController = () => {
   const gridContainer = document.querySelector('#grid-container')
+  const turnAndResult = document.querySelector('#player-turn')
 
   const drawGrid = () => {
-    board.grid.forEach((item) => {
+    board.grid.forEach((item, index) => {
+      let dataIndex = index
       let gridBox = document.createElement('div')
       gridContainer.appendChild(gridBox)
       gridBox.classList.add('grid-box')
       gridBox.textContent += item
+      gridBox.setAttribute('data-id', dataIndex)
+      dataIndex = dataIndex + 1
     })
   }
 
@@ -130,10 +134,10 @@ const displayController = () => {
   }
 
   const endGame = () => {
-    console.log(`${game.playerName} is the winner!`)
+    turnAndResult.textContent = `${game.playerName} is the winner!`
   }
 
-  return { drawGrid, clearGrid, gridContainer, endGame }
+  return { drawGrid, clearGrid, gridContainer, endGame, turnAndResult }
 }
 
 const display = displayController()
@@ -145,9 +149,11 @@ const main = (() => {
   const gridBtns = document.querySelector('#grid-container')
 
   const handleGridBtns = (e) => {
-    const gridBtnValue = e.target.textContent
+    let targetObj = e.target.getAttribute('data-id')
+    targetObj = Number(targetObj)
+    console.log(targetObj)
     for (let i = 0; i < board.grid.length; i++) {
-      if (gridBtnValue === board.grid[i]) {
+      if (targetObj === i) {
         game.placeMark(i)
         game.checkWinner()
         display.clearGrid()

@@ -8,9 +8,32 @@ body {
   align-items: center;
 }
 
+h1 {
+  border: solid 1px black;
+  margin: 0px;
+}
+
+#player-turn {
+  display: flex;
+  font: 16px;
+  font-weight: bold;
+  height: 40px;
+  width: 300px;
+  margin: 8px;
+  border: solid 1px black;
+}
+
+#btn-container {
+  display: flex;
+  height: 40px;
+  width: 300px;
+  border: solid 1px black;
+}
+
 #grid-container {
   display: grid;
-  font-size: 2em;
+  margin: 8px;
+  font-size: 32px;
   grid-template-rows: 100px 100px 100px;
   grid-template-columns: 100px 100px 100px;
   gap: 1px 1px;

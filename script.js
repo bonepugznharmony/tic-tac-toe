@@ -93,7 +93,15 @@ function gameFlow() {
   const tieGame = () => {
     if (game.turnCount === 9) {
       display.turnAndResult.textContent = 'Tie Game...'
+      display.showResetBtn()
     }
+  }
+
+  const resetGame = () => {
+    board.grid = ['', '', '', '', '', '', '', '', '']
+    display.clearGrid()
+    display.drawGrid()
+    display.removeResetBtn()
   }
 
   return {
@@ -105,6 +113,7 @@ function gameFlow() {
     tieGame,
     turnCount,
     winner,
+    resetGame,
   }
 }
 const game = gameFlow()
@@ -113,6 +122,8 @@ const game = gameFlow()
 const displayController = () => {
   const gridContainer = document.querySelector('#grid-container')
   const turnAndResult = document.querySelector('#player-turn')
+  const btnContainer = document.querySelector('#btn-container')
+  const resetBtn = document.createElement('button')
 
   const drawGrid = () => {
     board.grid.forEach((item, index) => {
@@ -135,9 +146,34 @@ const displayController = () => {
 
   const endGame = () => {
     turnAndResult.textContent = `${game.playerName} is the winner!`
+    display.showResetBtn()
   }
 
-  return { drawGrid, clearGrid, gridContainer, endGame, turnAndResult }
+  const showResetBtn = () => {
+    resetBtn.textContent = 'Play Again!'
+    resetBtn.setAttribute('id', 'resetBtn')
+    btnContainer.appendChild(resetBtn)
+    const playAgain = document.querySelector('#resetBtn')
+    playAgain.addEventListener('click', game.resetGame)
+  }
+
+  const removeResetBtn = () => {
+    btnContainer.removeChild(resetBtn)
+  }
+
+  const 
+
+  return {
+    drawGrid,
+    clearGrid,
+    gridContainer,
+    endGame,
+    turnAndResult,
+    btnContainer,
+    resetBtn,
+    showResetBtn,
+    removeResetBtn,
+  }
 }
 
 const display = displayController()

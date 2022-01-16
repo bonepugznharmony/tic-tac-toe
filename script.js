@@ -1,3 +1,95 @@
+// Game display function
+const displayController = () => {
+  const gridContainer = document.querySelector('#grid-container')
+  const turnAndResult = document.querySelector('#player-turn')
+  const btnContainer = document.querySelector('#btn-container')
+  const resetBtn = document.createElement('button')
+  const startContainer = document.querySelector('#start-container')
+  const playBtn = document.createElement('button')
+  const p1NameInput = document.querySelector('#player1Name')
+  const p2NameInput = document.querySelector('#player2Name')
+  let p1Name
+  let p2Name
+
+  const drawGrid = () => {
+    board.grid.forEach((item, index) => {
+      let dataIndex = index
+      let gridBox = document.createElement('div')
+      gridContainer.appendChild(gridBox)
+      gridBox.classList.add('grid-box')
+      gridBox.textContent += item
+      gridBox.setAttribute('data-id', dataIndex)
+      dataIndex = dataIndex + 1
+    })
+  }
+
+  const clearGrid = () => {
+    let previousGridBox = document.querySelectorAll('.grid-box')
+    previousGridBox.forEach((box) => {
+      gridContainer.removeChild(box)
+    })
+  }
+
+  const endGame = () => {
+    turnAndResult.textContent = `${game.playerName} is the winner!`
+    display.showResetBtn()
+  }
+
+  const showResetBtn = () => {
+    resetBtn.textContent = 'Play Again!'
+    resetBtn.setAttribute('id', 'resetBtn')
+    btnContainer.appendChild(resetBtn)
+    const playAgain = document.querySelector('#resetBtn')
+    playAgain.addEventListener('click', game.resetGame)
+  }
+
+  const removeResetBtn = () => {
+    btnContainer.removeChild(resetBtn)
+  }
+
+  const getPlayerNameValue = () => {
+    display.p1Name = display.p1NameInput.value
+    console.log(display.p1Name)
+
+    display.p2Name = display.p2NameInput.value
+    console.log(display.p2Name)
+  }
+
+  const startButton = () => {
+    playBtn.textContent = 'Start Game!'
+    playBtn.setAttribute('id', 'playBtn')
+    startContainer.appendChild(playBtn)
+    const playGame = document.querySelector('#playBtn')
+    playGame.addEventListener('click', (e) => {
+      display.getPlayerNameValue()
+      startContainer.remove()
+      display.drawGrid()
+    })
+  }
+
+  return {
+    drawGrid,
+    clearGrid,
+    gridContainer,
+    endGame,
+    turnAndResult,
+    btnContainer,
+    resetBtn,
+    showResetBtn,
+    removeResetBtn,
+    startContainer,
+    startButton,
+    playBtn,
+    p1NameInput,
+    p2NameInput,
+    getPlayerNameValue,
+    p1Name,
+    p2Name,
+  }
+}
+
+const display = displayController()
+
 // Gameboard IIFE and board instantiation
 const createGameBoard = (() => {
   const boardArray = () => {
@@ -5,13 +97,16 @@ const createGameBoard = (() => {
       grid: ['', '', '', '', '', '', '', '', ''],
     }
   }
-  const printBoard = () => {
+  const getBoard = () => {
     return boardArray()
   }
-  return { printBoard }
+
+  const resetBoard = () => board.grid.fill('')
+
+  return { getBoard, resetBoard }
 })()
 
-let board = createGameBoard.printBoard()
+let board = createGameBoard.getBoard()
 
 // Player factory function and instantiation
 const playerFactory = (name, mark) => {
@@ -25,12 +120,11 @@ const playerFactory = (name, mark) => {
   }
   return { getName, getMark }
 }
+const player1 = playerFactory(display.p1Name, 'X')
+const player2 = playerFactory(display.p2Name, 'O')
 
-const player1 = playerFactory('Player 1', 'X')
-const player2 = playerFactory('Player 2', 'O')
-
-// Game logic function and instantiation
-function gameFlow() {
+// Game related function and instantiation
+function gameContainer() {
   let player1Turn = true
   let playerMark = ''
   let playerName = ''
@@ -98,10 +192,18 @@ function gameFlow() {
   }
 
   const resetGame = () => {
-    board.grid = ['', '', '', '', '', '', '', '', '']
-    display.clearGrid()
-    display.drawGrid()
+    createGameBoard.resetBoard()
     display.removeResetBtn()
+    display.turnAndResult.textContent = ''
+    display.turnAndResult.appendChild(display.startContainer)
+    display.clearGrid()
+    game.player1Turn = true
+    game.playerMark = ''
+    game.playerName = ''
+    game.turnCount = 0
+    game.winner = false
+    display.drawGrid()
+    main()
   }
 
   return {
@@ -116,78 +218,18 @@ function gameFlow() {
     resetGame,
   }
 }
-const game = gameFlow()
+const game = gameContainer()
 
-// Game display function
-const displayController = () => {
-  const gridContainer = document.querySelector('#grid-container')
-  const turnAndResult = document.querySelector('#player-turn')
-  const btnContainer = document.querySelector('#btn-container')
-  const resetBtn = document.createElement('button')
-
-  const drawGrid = () => {
-    board.grid.forEach((item, index) => {
-      let dataIndex = index
-      let gridBox = document.createElement('div')
-      gridContainer.appendChild(gridBox)
-      gridBox.classList.add('grid-box')
-      gridBox.textContent += item
-      gridBox.setAttribute('data-id', dataIndex)
-      dataIndex = dataIndex + 1
-    })
-  }
-
-  const clearGrid = () => {
-    let previousGridBox = document.querySelectorAll('.grid-box')
-    previousGridBox.forEach((box) => {
-      gridContainer.removeChild(box)
-    })
-  }
-
-  const endGame = () => {
-    turnAndResult.textContent = `${game.playerName} is the winner!`
-    display.showResetBtn()
-  }
-
-  const showResetBtn = () => {
-    resetBtn.textContent = 'Play Again!'
-    resetBtn.setAttribute('id', 'resetBtn')
-    btnContainer.appendChild(resetBtn)
-    const playAgain = document.querySelector('#resetBtn')
-    playAgain.addEventListener('click', game.resetGame)
-  }
-
-  const removeResetBtn = () => {
-    btnContainer.removeChild(resetBtn)
-  }
-
-  const 
-
-  return {
-    drawGrid,
-    clearGrid,
-    gridContainer,
-    endGame,
-    turnAndResult,
-    btnContainer,
-    resetBtn,
-    showResetBtn,
-    removeResetBtn,
-  }
-}
-
-const display = displayController()
-
-// Main IIFE to execute flow
-const main = (() => {
-  display.drawGrid()
+// Main function to execute flow
+let main
+;(main = () => {
+  display.startButton()
 
   const gridBtns = document.querySelector('#grid-container')
 
   const handleGridBtns = (e) => {
     let targetObj = e.target.getAttribute('data-id')
     targetObj = Number(targetObj)
-    console.log(targetObj)
     for (let i = 0; i < board.grid.length; i++) {
       if (targetObj === i) {
         game.placeMark(i)

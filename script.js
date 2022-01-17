@@ -10,6 +10,8 @@ const displayController = () => {
   const p2NameInput = document.querySelector('#player2Name')
   let p1Name
   let p2Name
+  let player1
+  let player2
 
   const drawGrid = () => {
     board.grid.forEach((item, index) => {
@@ -49,10 +51,7 @@ const displayController = () => {
 
   const getPlayerNameValue = () => {
     display.p1Name = display.p1NameInput.value
-    console.log(display.p1Name)
-
     display.p2Name = display.p2NameInput.value
-    console.log(display.p2Name)
   }
 
   const startButton = () => {
@@ -62,6 +61,9 @@ const displayController = () => {
     const playGame = document.querySelector('#playBtn')
     playGame.addEventListener('click', (e) => {
       display.getPlayerNameValue()
+      // player 1 and 2 creation
+      display.player1 = playerFactory(display.p1Name, 'X')
+      display.player2 = playerFactory(display.p2Name, 'O')
       startContainer.remove()
       display.drawGrid()
     })
@@ -85,6 +87,8 @@ const displayController = () => {
     getPlayerNameValue,
     p1Name,
     p2Name,
+    player1,
+    player2,
   }
 }
 
@@ -120,8 +124,6 @@ const playerFactory = (name, mark) => {
   }
   return { getName, getMark }
 }
-const player1 = playerFactory(display.p1Name, 'X')
-const player2 = playerFactory(display.p2Name, 'O')
 
 // Game related function and instantiation
 function gameContainer() {
@@ -135,13 +137,13 @@ function gameContainer() {
     if (player1Turn) {
       game.player1Turn = false
       game.turnCount += 1
-      game.playerName = player1.getName()
-      return player1.getMark()
+      game.playerName = display.player1.getName()
+      return display.player1.getMark()
     } else {
       game.player1Turn = true
       game.turnCount += 1
-      game.playerName = player2.getName()
-      return player2.getMark()
+      game.playerName = display.player2.getName()
+      return display.player2.getMark()
     }
   }
 
@@ -157,9 +159,9 @@ function gameContainer() {
   // Check win condition
   const checkWinner = () => {
     if (game.player1Turn === false) {
-      playerMark = player1.getMark()
+      playerMark = display.player1.getMark()
     } else {
-      playerMark = player2.getMark()
+      playerMark = display.player2.getMark()
     }
 
     const winCombos = [

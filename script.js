@@ -1,17 +1,14 @@
 // Game display function
 const displayController = () => {
   const gridContainer = document.querySelector('#grid-container')
-  const turnAndResult = document.querySelector('#player-turn')
-  const btnContainer = document.querySelector('#btn-container')
+  const outputContainer = document.querySelector('#output-container')
   const resetBtn = document.createElement('button')
   const startContainer = document.querySelector('#start-container')
   const playBtn = document.createElement('button')
-  const p1NameInput = document.querySelector('#player1Name')
-  const p2NameInput = document.querySelector('#player2Name')
+  const p1NameInput = document.querySelector('#player1NameInput')
+  const p2NameInput = document.querySelector('#player2NameInput')
   let p1Name
   let p2Name
-  let player1
-  let player2
 
   const drawGrid = () => {
     board.grid.forEach((item, index) => {
@@ -33,25 +30,25 @@ const displayController = () => {
   }
 
   const endGame = () => {
-    turnAndResult.textContent = `${game.playerName} is the winner!`
+    outputContainer.textContent = `${game.playerName} is the winner!`
     display.showResetBtn()
   }
 
   const showResetBtn = () => {
     resetBtn.textContent = 'Play Again!'
     resetBtn.setAttribute('id', 'resetBtn')
-    btnContainer.appendChild(resetBtn)
+    outputContainer.appendChild(resetBtn)
     const playAgain = document.querySelector('#resetBtn')
     playAgain.addEventListener('click', game.resetGame)
   }
 
   const removeResetBtn = () => {
-    btnContainer.removeChild(resetBtn)
+    outputContainer.removeChild(resetBtn)
   }
 
   const getPlayerNameValue = () => {
-    display.p1Name = display.p1NameInput.value
-    display.p2Name = display.p2NameInput.value
+    display.p1Name = display.p1NameInput.value.replace(/\s+/g, ' ').trim()
+    display.p2Name = display.p2NameInput.value.replace(/\s+/g, ' ').trim()
   }
 
   const startButton = () => {
@@ -60,13 +57,46 @@ const displayController = () => {
     startContainer.appendChild(playBtn)
     const playGame = document.querySelector('#playBtn')
     playGame.addEventListener('click', (e) => {
+      if (
+        display.p1NameInput.value === '' ||
+        display.p2NameInput.value === ''
+      ) {
+        return e.preventDefault()
+      }
       display.getPlayerNameValue()
-      // player 1 and 2 creation
-      display.player1 = playerFactory(display.p1Name, 'X')
-      display.player2 = playerFactory(display.p2Name, 'O')
+      game.createPlayers()
       startContainer.remove()
+      display.outputContainer.textContent = `It's ${game.player1.getName()}'s turn!`
+      display.clearGrid()
       display.drawGrid()
+      display.handleGridBtns
+      gridContainer.addEventListener('click', handleGridBtns)
     })
+  }
+
+  //display.startButton()
+
+  const handleGridBtns = (e) => {
+    let targetObj = e.target.getAttribute('data-id')
+    targetObj = Number(targetObj)
+
+    if (e.target === gridContainer) {
+      e.preventDefault()
+    } else {
+      for (let i = 0; i < board.grid.length; i++) {
+        if (targetObj === i) {
+          game.placeMark(i)
+          game.checkWinner()
+          display.clearGrid()
+          display.drawGrid()
+          if (game.winner === true) {
+            gridContainer.removeEventListener('click', handleGridBtns)
+            return display.endGame()
+          }
+          game.tieGame()
+        }
+      }
+    }
   }
 
   return {
@@ -74,8 +104,7 @@ const displayController = () => {
     clearGrid,
     gridContainer,
     endGame,
-    turnAndResult,
-    btnContainer,
+    outputContainer,
     resetBtn,
     showResetBtn,
     removeResetBtn,
@@ -87,8 +116,7 @@ const displayController = () => {
     getPlayerNameValue,
     p1Name,
     p2Name,
-    player1,
-    player2,
+    handleGridBtns,
   }
 }
 
@@ -132,18 +160,27 @@ function gameContainer() {
   let playerName = ''
   let turnCount = 0
   let winner = false
+  let player1
+  let player2
+
+  const createPlayers = () => {
+    game.player1 = playerFactory(display.p1Name, 'X')
+    game.player2 = playerFactory(display.p2Name, 'O')
+  }
 
   const switchPlayers = (player1Turn) => {
     if (player1Turn) {
       game.player1Turn = false
       game.turnCount += 1
-      game.playerName = display.player1.getName()
-      return display.player1.getMark()
+      game.playerName = game.player1.getName()
+      display.outputContainer.textContent = `${game.player2.getName()}'s turn!`
+      return game.player1.getMark()
     } else {
       game.player1Turn = true
       game.turnCount += 1
-      game.playerName = display.player2.getName()
-      return display.player2.getMark()
+      game.playerName = game.player2.getName()
+      display.outputContainer.textContent = `${game.player1.getName()}'s turn!`
+      return game.player2.getMark()
     }
   }
 
@@ -159,9 +196,9 @@ function gameContainer() {
   // Check win condition
   const checkWinner = () => {
     if (game.player1Turn === false) {
-      playerMark = display.player1.getMark()
+      playerMark = game.player1.getMark()
     } else {
-      playerMark = display.player2.getMark()
+      playerMark = game.player2.getMark()
     }
 
     const winCombos = [
@@ -188,23 +225,26 @@ function gameContainer() {
 
   const tieGame = () => {
     if (game.turnCount === 9) {
-      display.turnAndResult.textContent = 'Tie Game...'
+      display.outputContainer.textContent = 'Tie Game...'
       display.showResetBtn()
     }
   }
 
   const resetGame = () => {
     createGameBoard.resetBoard()
-    display.removeResetBtn()
-    display.turnAndResult.textContent = ''
-    display.turnAndResult.appendChild(display.startContainer)
-    display.clearGrid()
     game.player1Turn = true
     game.playerMark = ''
     game.playerName = ''
     game.turnCount = 0
     game.winner = false
-    display.drawGrid()
+    game.player1 = ''
+    game.player2 = ''
+    display.p1NameInput.value = ''
+    display.p2NameInput.value = ''
+    display.removeResetBtn()
+    display.outputContainer.textContent = ''
+    display.outputContainer.appendChild(display.startContainer)
+    display.clearGrid()
     main()
   }
 
@@ -218,34 +258,50 @@ function gameContainer() {
     turnCount,
     winner,
     resetGame,
+    player1,
+    player2,
+    createPlayers,
   }
 }
 const game = gameContainer()
 
+/*
 // Main function to execute flow
 let main
 ;(main = () => {
   display.startButton()
 
-  const gridBtns = document.querySelector('#grid-container')
+  const gridContainer = document.querySelector('#grid-container')
 
   const handleGridBtns = (e) => {
     let targetObj = e.target.getAttribute('data-id')
     targetObj = Number(targetObj)
-    for (let i = 0; i < board.grid.length; i++) {
-      if (targetObj === i) {
-        game.placeMark(i)
-        game.checkWinner()
-        display.clearGrid()
-        display.drawGrid()
-        if (game.winner === true) {
-          gridBtns.removeEventListener('click', handleGridBtns)
-          return display.endGame()
+
+    if (e.target === gridContainer) {
+      e.preventDefault()
+    } else {
+      for (let i = 0; i < board.grid.length; i++) {
+        if (targetObj === i) {
+          game.placeMark(i)
+          game.checkWinner()
+          display.clearGrid()
+          display.drawGrid()
+          if (game.winner === true) {
+            gridContainer.removeEventListener('click', handleGridBtns)
+            return display.endGame()
+          }
+          game.tieGame()
         }
-        game.tieGame()
       }
     }
   }
 
-  gridBtns.addEventListener('click', handleGridBtns)
+  gridContainer.addEventListener('click', handleGridBtns)
 })()
+*/
+
+const main = () => {
+  display.startButton()
+}
+
+main()

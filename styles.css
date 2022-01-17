@@ -1,16 +1,18 @@
 * {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Patrick Hand';
 }
 
 body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: gainsboro;
 }
 
 h1 {
   margin: 0px;
   padding: 5px;
+  font-size: 64px;
 }
 
 #start-container {
@@ -18,64 +20,187 @@ h1 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: solid 1px black;
-  height: 100px;
+  padding: 10px;
 }
 
-#player1Name {
-  margin: 5px;
-  border: 1px solid black;
+label {
+  font-size: 24px;
 }
 
-#player2Name {
-  margin: 5px;
-  border: 1px solid black;
+#player1NameInput {
+  margin-bottom: 15px;
+  border: 3px solid black;
+  border-radius: 8px;
+  font-size: 24px;
+  padding: 5px;
+  text-align: center;
 }
 
-#player-turn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font: 16px;
-  height: 125px;
-  width: 320px;
-  margin: 8px;
-  border: solid 1px black;
-}
-
-#btn-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 40px;
-  width: 320px;
-  border: solid 1px black;
+#player2NameInput {
+  margin-bottom: 15px;
+  border: 3px solid black;
+  border-radius: 8px;
+  font-size: 24px;
+  padding: 5px;
+  text-align: center;
 }
 
 #playBtn {
+  border: 3px solid black;
+  border-radius: 8px;
+  font-size: 24px;
+  padding: 5px 20px;
+  background-color: white;
+}
+
+#playBtn:hover {
+  background-color: mediumaquamarine;
+}
+
+#output-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  width: 350px;
   margin: 5px;
+  border: solid 5px rgb(255, 144, 112);
+  border-radius: 15px;
+  background-color: whitesmoke;
+  font-size: 32px;
+}
+
+#resetBtn {
+  margin-top: 10px;
+  border: 3px solid black;
+  border-radius: 8px;
+  font-size: 24px;
+  padding: 5px 20px;
+  background-color: white;
+}
+
+#resetBtn:hover {
+  background-color: palevioletred;
 }
 
 #grid-container {
   display: grid;
-  margin: 10px;
-  font-size: 32px;
-  grid-template-rows: 100px 100px 100px;
-  grid-template-columns: 100px 100px 100px;
-  gap: 1px 1px;
-  border: 1px solid black;
-  padding: 10px;
+  margin: 5px;
+  grid-template-rows: repeat(3, 100px);
+  grid-template-columns: repeat(3, 100px);
+  padding: 25px;
+  border: 5px solid rgb(165, 138, 247);
+  border-radius: 15px;
+  background-color: whitesmoke;
 }
 
 .grid-box {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 32px;
-  border: 1px dotted black;
+  font-size: 64px;
   cursor: pointer;
+  transition: background-color 0.5s ease-out;
 }
 
 .grid-box:hover {
-  background-color: lightgreen;
+  background-color: rgb(95, 142, 227);
+}
+
+[data-id='0'] {
+  border-top: none;
+  border-right: solid 5px black;
+  border-bottom: solid 5px black;
+  border-left: none;
+}
+
+[data-id='3'] {
+  border-top: none;
+  border-right: solid 5px black;
+  border-bottom: solid 5px black;
+  border-left: none;
+}
+
+[data-id='6'] {
+  border-top: none;
+  border-right: solid 5px black;
+  border-bottom: none;
+  border-left: none;
+}
+
+[data-id='1'] {
+  border-top: none;
+  border-right: solid 5px black;
+  border-bottom: solid 5px black;
+  border-left: none;
+}
+
+[data-id='4'] {
+  border-top: none;
+  border-right: solid 5px black;
+  border-bottom: solid 5px black;
+  border-left: none;
+}
+
+[data-id='7'] {
+  border-top: none;
+  border-right: solid 5px black;
+  border-bottom: none;
+  border-left: none;
+}
+
+[data-id='2'] {
+  border-top: none;
+  border-right: none;
+  border-bottom: solid 5px black;
+  border-left: none;
+}
+
+[data-id='5'] {
+  border-top: none;
+  border-right: none;
+  border-bottom: solid 5px black;
+  border-left: none;
+}
+[data-id='8'] {
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
+  border-left: none;
+}
+
+footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: auto;
+  border: none;
+  align-items: center;
+  min-height: 75px;
+}
+
+.footer-link {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  border: none;
+  align-items: center;
+}
+
+footer a {
+  font-size: 16px;
+  font-weight: bold;
+  color: black;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+footer img {
+  width: 16px;
+  height: 16px;
+  margin-left: 5px;
 }

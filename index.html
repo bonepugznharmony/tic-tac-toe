@@ -7,24 +7,35 @@
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="styles.css" />
-  </head>
+    <style> 
+    @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+    </style>
+</head>
 
   <body>
     <h1>Tic Tac Toe</h1>
    
-    <div id="player-turn">
+    <div id="output-container">
        <div id="start-container">
-      <label for='player1Name'>Player 1 'X'
-        <input type="text" id="player1Name" placeholder="enter your name!"></input>
+      <label for='player1NameInput'>X:
+        <input type="text" id="player1NameInput" placeholder="player 'X' name">
+      </input>
       </label>
-      <label for='player2Name'>Player 2 'O'
-        <input type="text" id="player2Name" placeholder="enter your name!"></input>
+      <label for='player2Name'>O:
+        <input type="text" id="player2NameInput" placeholder="player 'O' name">
+      </input>
       </label>
     </div>
     </div>
-    <div id="btn-container"></div>
     <div id="grid-container"></div>
-
-    <script src="script.js" async defer></script>
   </body>
+
+  <footer>
+		<div class="footer-link">
+			<a href="https://github.com/bonepugznharmony?tab=repositories">Back to my github repo</a>
+			<img src="./images/Octocat.png" alt="Github Icon" />
+		</div>
+	</footer>
+
+  <script src="script.js" async defer></script>
 </html>

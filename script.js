@@ -74,8 +74,6 @@ const displayController = () => {
     })
   }
 
-  //display.startButton()
-
   const handleGridBtns = (e) => {
     let targetObj = e.target.getAttribute('data-id')
     targetObj = Number(targetObj)
@@ -264,41 +262,6 @@ function gameContainer() {
   }
 }
 const game = gameContainer()
-
-/*
-// Main function to execute flow
-let main
-;(main = () => {
-  display.startButton()
-
-  const gridContainer = document.querySelector('#grid-container')
-
-  const handleGridBtns = (e) => {
-    let targetObj = e.target.getAttribute('data-id')
-    targetObj = Number(targetObj)
-
-    if (e.target === gridContainer) {
-      e.preventDefault()
-    } else {
-      for (let i = 0; i < board.grid.length; i++) {
-        if (targetObj === i) {
-          game.placeMark(i)
-          game.checkWinner()
-          display.clearGrid()
-          display.drawGrid()
-          if (game.winner === true) {
-            gridContainer.removeEventListener('click', handleGridBtns)
-            return display.endGame()
-          }
-          game.tieGame()
-        }
-      }
-    }
-  }
-
-  gridContainer.addEventListener('click', handleGridBtns)
-})()
-*/
 
 const main = () => {
   display.startButton()

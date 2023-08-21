@@ -1,6 +1,6 @@
 # Tic Tac Toe Project
 
-Live Demo: https://ts-oh.github.io/tic-tac-toe/
+Live Demo: https://ts-oh.github.io/js-tic-tac-toe/
 
 ## Screenshots
 
